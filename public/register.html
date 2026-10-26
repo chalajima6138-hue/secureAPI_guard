@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Create account — SecureAPI Guard</title>
+  <link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+  <div class="wrap">
+    <nav class="nav"><a class="brand" href="/">SecureAPI Guard</a></nav>
+    <main class="card auth-box">
+      <h1>Create account</h1>
+      <form id="auth-form" data-mode="register" novalidate>
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" autocomplete="email" required>
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" autocomplete="new-password" required minlength="10" maxlength="128">
+        <div class="hint">10 to 128 characters.</div>
+        <div id="message" class="msg error hidden" role="alert"></div>
+        <p><button class="btn" type="submit">Create account</button></p>
+      </form>
+      <p class="hint">Already registered? <a href="/login">Log in</a></p>
+    </main>
+  </div>
+  <script src="/js/common.js"></script>
+  <script src="/js/auth.js"></script>
+</body>
+</html>

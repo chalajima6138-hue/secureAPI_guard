@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard — SecureAPI Guard</title>
+  <link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+  <div class="wrap">
+    <nav class="nav">
+      <a class="brand" href="/">SecureAPI Guard</a>
+      <div class="nav-links"><span id="who" class="hint"></span><button id="logout" class="btn secondary small" type="button">Log out</button></div>
+    </nav>
+
+    <div id="page-error" class="msg error hidden" role="alert"></div>
+
+    <div class="toolbar">
+      <div><label for="range">Time range</label>
+        <select id="range"><option value="24h">Last 24 hours</option><option value="7d">Last 7 days</option><option value="30d">Last 30 days</option></select></div>
+      <div><label for="api-filter">API</label><select id="api-filter"><option value="">All APIs</option></select></div>
+      <div><button id="refresh" class="btn secondary" type="button">Refresh</button></div>
+      <div><button id="add-api-btn" class="btn" type="button">Add API</button></div>
+    </div>
+
+    <section id="add-api" class="panel hidden">
+      <div class="panel-head"><h2>Add an API</h2><button id="add-cancel" class="btn secondary small" type="button">Close</button></div>
+      <form id="add-form" novalidate>
+        <div class="inline-form">
+          <div><label for="f-name">API name</label><input id="f-name" maxlength="80" required></div>
+          <div><label for="f-env">Environment</label><select id="f-env"><option>development</option><option>staging</option><option>production</option></select></div>
+          <div><label for="f-url">Backend API address</label><input id="f-url" type="url" placeholder="https://api.example.com" required>
+            <div class="hint">Public origin of your API (optionally with a base path). Private, loopback and cloud-metadata addresses are refused.</div></div>
+          <div><label for="f-mode">Enforcement mode</label><select id="f-mode"><option value="monitoring">Monitoring (record only)</option><option value="blocking">Blocking (reject matches with 403)</option></select></div>
+          <div><label for="f-threshold">Block threshold</label><select id="f-threshold"><option value="medium">Medium and above</option><option value="high">High only</option><option value="low">Low and above</option></select></div>
+          <div><label for="f-body">Max request body (KB)</label><input id="f-body" type="number" min="1" max="1024" value="256"></div>
+        </div>
+        <label class="checkrow hidden" id="confirm-row"><input type="checkbox" id="f-confirm"><span>I understand blocking mode will reject matching requests, including false positives, before they reach my backend. Heuristic detection can block legitimate traffic.</span></label>
+        <div id="add-msg" class="msg error hidden" role="alert"></div>
+        <p><button class="btn" type="submit">Register API</button></p>
+      </form>
+    </section>
+
+    <div id="secret-box" class="hidden"></div>
+
+    <div class="stats" id="stats">
+      <div class="stat"><div class="n" id="s-inspected">–</div><div class="l">Requests inspected</div></div>
+      <div class="stat"><div class="n" id="s-allowed">–</div><div class="l">Allowed (forwarded)</div></div>
+      <div class="stat"><div class="n" id="s-blocked">–</div><div class="l">Blocked by gateway</div></div>
+      <div class="stat"><div class="n" id="s-suspicious">–</div><div class="l">Suspicious requests</div></div>
+      <div class="stat"><div class="n" id="s-errors">–</div><div class="l">Upstream/inspection errors</div></div>
+    </div>
+
+    <div class="panels">
+      <div class="panel"><h2>Requests over time</h2><div class="chart" id="chart-time"></div>
+        <div class="legend"><span><i class="i-all"></i>Inspected</span><span><i class="i-sus"></i>Suspicious</span><span><i class="i-blk"></i>Blocked</span></div></div>
+      <div class="panel"><h2>Allowed vs blocked</h2><div id="chart-ab"></div><h2 class="spaced">Events by category</h2><div id="chart-cat"></div></div>
+    </div>
+
+    <section class="panel">
+      <div class="panel-head"><h2>Your APIs</h2></div>
+      <div id="apis"></div>
+    </section>
+    <section id="api-detail" class="panel hidden"></section>
+
+    <section class="panel">
+      <div class="panel-head"><h2>Recent security events</h2></div>
+      <div id="events"></div>
+      <p><button id="more-events" class="btn secondary small hidden" type="button">Load more</button></p>
+    </section>
+    <section id="event-detail" class="panel hidden"></section>
+    <footer>Counts reflect requests that passed through the gateway for the selected range. Detection is heuristic.</footer>
+  </div>
+  <script src="/js/common.js"></script>
+  <script src="/js/dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SecureAPI Guard — API request inspection and monitoring</title>
+  <meta name="description" content="A gateway that inspects API traffic for SQL injection and XSS patterns, records security events and shows them on a private dashboard.">
+  <link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+  <div class="wrap">
+    <nav class="nav">
+      <a class="brand" href="/">SecureAPI Guard</a>
+      <div class="nav-links">
+        <a href="#how">How it works</a>
+        <a href="#limits">Limitations</a>
+        <a class="btn secondary small" href="/login">Log in</a>
+        <a class="btn small" href="/register">Create account</a>
+      </div>
+    </nav>
+
+    <header class="hero">
+      <h1>See what is hitting your API, and stop the obvious attacks.</h1>
+      <p>SecureAPI Guard is a gateway that sits in front of your API, inspects each request for SQL injection and cross-site scripting patterns, records security events, and shows them on a private dashboard.</p>
+      <div class="cta">
+        <a class="btn" href="/register">Get started</a>
+        <a class="btn secondary" href="#how">See how it connects</a>
+      </div>
+    </header>
+
+    <section class="block" id="what">
+      <h2>What it does</h2>
+      <div class="grid">
+        <div class="card"><h3>SQL injection and XSS inspection</h3><p>Query strings, paths, selected headers and JSON, form and text bodies are decoded and checked against a set of detection rules.</p></div>
+        <div class="card"><h3>Monitor or block</h3><p>Start in monitoring mode, which records suspicious requests without interfering. Switch to blocking mode to return 403 before a matching request reaches your backend.</p></div>
+        <div class="card"><h3>Security event log</h3><p>Every rule match is stored with its category, severity, rule, request ID and what the gateway actually did. Passwords, authorization headers, cookies and full request bodies are never stored.</p></div>
+        <div class="card"><h3>Private dashboard</h3><p>Request volume, allowed versus blocked counts, events by category and recent activity, calculated from your own recorded traffic only.</p></div>
+      </div>
+    </section>
+
+    <section class="block" id="how">
+      <h2>How you connect an API</h2>
+      <ol class="steps">
+        <li><strong>Create an account</strong> and register your API with its name, environment and backend address.</li>
+        <li><strong>Receive a gateway address and an API key.</strong> The key is shown once. Only a hash is stored.</li>
+        <li><strong>Route traffic through the gateway.</strong> Point your client, reverse proxy or DNS at the gateway address and send the key in an <code>X-Guard-Key</code> header. An API is only protected while its traffic actually flows through the gateway.</li>
+        <li><strong>Watch the dashboard.</strong> The connection shows as active after the first request is seen. Review events, then enable blocking when you trust the rules against your traffic.</li>
+      </ol>
+      <pre><code>curl https://your-guard-host/gateway/&lt;api-id&gt;/v1/products?limit=10 \
+  -H "X-Guard-Key: sag_..."</code></pre>
+      <p class="hint">Requests flow: your application, then the SecureAPI Guard gateway, then your backend API.</p>
+    </section>
+
+    <section class="block" id="limits">
+      <div class="card limits">
+        <h2>Current limitations</h2>
+        <p>Detection is rule-based and heuristic. It will miss some attacks and will sometimes flag harmless input. It complements, and does not replace, parameterized queries, output encoding, authentication, authorization and input validation in your own code.</p>
+        <ul>
+          <li>Only SQL injection and XSS patterns are checked. Other attack classes are not detected.</li>
+          <li>Multipart uploads and binary bodies are forwarded but not inspected.</li>
+          <li>Responses from your backend are not inspected.</li>
+          <li>The service currently runs as a single instance with a local database and is intended for controlled pilots.</li>
+          <li>Requests that bypass the gateway are neither seen nor protected.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="block">
+      <div class="card">
+        <h2>Ready to try it?</h2>
+        <p>Create an account, register a test API and send a few requests through the gateway.</p>
+        <div class="cta"><a class="btn" href="/register">Create account</a><a class="btn secondary" href="/login">Log in</a></div>
+      </div>
+    </section>
+    <footer>SecureAPI Guard — pilot build. Not a substitute for secure application design.</footer>
+  </div>
+</body>
+</html>
